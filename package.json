@@ -1,0 +1,71 @@
+{
+  "name": "clawhatch",
+  "version": "0.1.0",
+  "description": "Security scanner for OpenClaw AI agents — 100-point audit with auto-fix",
+  "type": "module",
+  "bin": {
+    "clawhatch": "./dist/index.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "!dist/__tests__",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/index.ts",
+    "start": "node dist/index.js",
+    "typecheck": "tsc --noEmit",
+    "test": "tsc && node --test dist/__tests__/*.test.js",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "security",
+    "ai",
+    "agent",
+    "openclaw",
+    "scanner",
+    "audit",
+    "ai-agent",
+    "ai-agent-security",
+    "cli",
+    "security-audit",
+    "configuration-scanner",
+    "devops",
+    "devsecops",
+    "infosec",
+    "secret-scanning",
+    "hardening",
+    "compliance",
+    "claude",
+    "openai",
+    "llm-security"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wlshlad85/clawhatch.git"
+  },
+  "homepage": "https://github.com/wlshlad85/clawhatch#readme",
+  "bugs": {
+    "url": "https://github.com/wlshlad85/clawhatch/issues"
+  },
+  "author": "Clawhatch <security@clawhatch.com>",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "chalk": "5.4.1",
+    "commander": "13.1.0",
+    "glob": "11.1.0",
+    "json5": "2.2.3"
+  },
+  "devDependencies": {
+    "@types/node": "22.13.1",
+    "tsx": "4.21.0",
+    "typescript": "5.7.3"
+  }
+}

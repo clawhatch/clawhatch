@@ -1,0 +1,22 @@
+# Source
+src/
+
+# Tests
+dist/__tests__/
+
+# Dev configs
+tsconfig.json
+.eslintrc*
+.prettierrc*
+
+# Dev files
+EXPAND-TO-100-HANDOFF.md
+NPM-READINESS-REPORT.md
+NUL
+
+# Git
+.git/
+.gitignore
+
+# Node
+node_modules/

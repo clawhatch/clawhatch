@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Source maps
+*.js.map
+
+# Environment / secrets
+.env
+.env.*
+credentials/
+
+# Backups
+*.bak.*
+
+# Test coverage
+coverage/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/settings.json
+.idea/
+
+# Misc
+NUL
