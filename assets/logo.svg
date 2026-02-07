@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <linearGradient id="shield-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF4D4D;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#C41E3A;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="claw-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFE0E0;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  
+  <!-- Shield body -->
+  <path d="M256 28 L462 120 L462 280 C462 380 370 460 256 496 C142 460 50 380 50 280 L50 120 Z" 
+        fill="url(#shield-grad)" filter="url(#shadow)"/>
+  
+  <!-- Shield inner border -->
+  <path d="M256 52 L440 134 L440 276 C440 366 356 440 256 474 C156 440 72 366 72 276 L72 134 Z" 
+        fill="none" stroke="#FF8080" stroke-width="2" opacity="0.5"/>
+  
+  <!-- Lobster claw - left pincer -->
+  <path d="M180 180 C150 160 120 170 115 200 C110 230 130 260 160 260 L200 240" 
+        stroke="url(#claw-grad)" stroke-width="16" stroke-linecap="round" fill="none"/>
+  
+  <!-- Lobster claw - right pincer -->  
+  <path d="M332 180 C362 160 392 170 397 200 C402 230 382 260 352 260 L312 240" 
+        stroke="url(#claw-grad)" stroke-width="16" stroke-linecap="round" fill="none"/>
+  
+  <!-- Lobster claw - left inner -->
+  <path d="M200 240 C190 250 185 265 195 280 L220 290" 
+        stroke="url(#claw-grad)" stroke-width="12" stroke-linecap="round" fill="none"/>
+  
+  <!-- Lobster claw - right inner -->
+  <path d="M312 240 C322 250 327 265 317 280 L292 290" 
+        stroke="url(#claw-grad)" stroke-width="12" stroke-linecap="round" fill="none"/>
+  
+  <!-- Checkmark / scan complete -->
+  <path d="M196 320 L240 370 L340 260" 
+        stroke="#FFFFFF" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  
+  <!-- Scan lines -->
+  <line x1="140" y1="390" x2="372" y2="390" stroke="#FF8080" stroke-width="3" opacity="0.6"/>
+  <line x1="160" y1="405" x2="352" y2="405" stroke="#FF8080" stroke-width="2" opacity="0.4"/>
+  <line x1="180" y1="418" x2="332" y2="418" stroke="#FF8080" stroke-width="1.5" opacity="0.3"/>
+</svg>

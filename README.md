@@ -1,12 +1,20 @@
-# clawhatch
+<p align="center">
+  <img src="assets/banner.svg" alt="Clawhatch — Security scanner for AI agents" width="100%">
+</p>
 
-> Security scanner for OpenClaw AI agents — 100-point audit with auto-fix.
+<p align="center">
+  <a href="https://www.npmjs.com/package/clawhatch"><img src="https://img.shields.io/npm/v/clawhatch.svg?style=flat-square&color=c41e3a" alt="npm version"></a>
+  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/npm/l/clawhatch.svg?style=flat-square&color=c41e3a" alt="license"></a>
+  <a href="https://nodejs.org/"><img src="https://img.shields.io/node/v/clawhatch.svg?style=flat-square&color=c41e3a" alt="node"></a>
+  <a href="https://www.npmjs.com/package/clawhatch"><img src="https://img.shields.io/npm/dt/clawhatch.svg?style=flat-square&color=c41e3a" alt="downloads"></a>
+</p>
 
-[![npm version](https://img.shields.io/npm/v/clawhatch.svg)](https://www.npmjs.com/package/clawhatch)
-[![license](https://img.shields.io/npm/l/clawhatch.svg)](https://opensource.org/licenses/MIT)
-[![node](https://img.shields.io/node/v/clawhatch.svg)](https://nodejs.org/)
+<p align="center">
+  <strong>100 automated security checks</strong> for your <a href="https://openclaw.com">OpenClaw</a> AI agent.<br>
+  Scores 0–100. Auto-fixes safe issues. Runs in under a second.
+</p>
 
-Clawhatch runs **100 automated security checks** against your [OpenClaw](https://openclaw.com) installation, scores it on a 100-point scale (A+ to F), and can auto-fix safe issues. Think of it as `npm audit` for your AI agent.
+---
 
 ## Quick Start
 
@@ -332,6 +340,18 @@ When a new threat is detected across the community, subscribers are notified ins
 
 - **Node.js** >= 18.0.0
 - **OpenClaw** installed (auto-detected or specify with `--path`)
+
+## Brand
+
+| Element | Value |
+|---------|-------|
+| **Primary** | `#C41E3A` (Clawhatch Red) |
+| **Dark** | `#1A1A2E` (Deep Navy) |
+| **Accent** | `#FF4D4D` (Alert Red) |
+| **Soft** | `#FF8080` (Scan Pink) |
+| **Background** | `#16213E` → `#0F3460` (gradient) |
+
+Logo and banner assets are in [`assets/`](assets/).
 
 ## Contributing
 
