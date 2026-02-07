@@ -3,241 +3,330 @@
 </p>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/clawhatch"><img src="https://img.shields.io/npm/v/clawhatch.svg?style=flat-square&color=c41e3a" alt="npm version"></a>
-  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/npm/l/clawhatch.svg?style=flat-square&color=c41e3a" alt="license"></a>
-  <a href="https://nodejs.org/"><img src="https://img.shields.io/node/v/clawhatch.svg?style=flat-square&color=c41e3a" alt="node"></a>
-  <a href="https://www.npmjs.com/package/clawhatch"><img src="https://img.shields.io/npm/dt/clawhatch.svg?style=flat-square&color=c41e3a" alt="downloads"></a>
+  <a href="https://www.npmjs.com/package/clawhatch"><img src="https://img.shields.io/npm/v/clawhatch.svg?style=for-the-badge&color=c41e3a&logo=npm&logoColor=white" alt="npm version"></a>&nbsp;
+  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/npm/l/clawhatch.svg?style=for-the-badge&color=c41e3a" alt="license"></a>&nbsp;
+  <a href="https://nodejs.org/"><img src="https://img.shields.io/node/v/clawhatch.svg?style=for-the-badge&color=c41e3a&logo=node.js&logoColor=white" alt="node"></a>&nbsp;
+  <a href="https://www.npmjs.com/package/clawhatch"><img src="https://img.shields.io/npm/dt/clawhatch.svg?style=for-the-badge&color=c41e3a" alt="downloads"></a>
 </p>
 
+<br>
+
+<h3 align="center">🔴 Your AI agent has shell access, file control, and browser automation.<br>Is anyone checking its security?</h3>
+
 <p align="center">
-  <strong>100 automated security checks</strong> for your <a href="https://openclaw.com">OpenClaw</a> AI agent.<br>
-  Scores 0–100. Auto-fixes safe issues. Runs in under a second.
+  <strong>Clawhatch</strong> runs <strong>100 automated security checks</strong> on your <a href="https://openclaw.com">OpenClaw</a> AI agent config.<br>
+  Scores 0–100 · Auto-fixes safe issues · Runs in under a second · 100% offline
 </p>
+
+<br>
+
+<p align="center">
+  <code>npx clawhatch scan</code>
+</p>
+
+<p align="center"><em>No install. No account. No data leaves your machine. One command.</em></p>
+
+<br>
 
 ---
 
-## Quick Start
+<br>
+
+## ⚡ Before & After
+
+<table>
+<tr>
+<td width="50%">
+
+### 😰 Before Clawhatch
+```
+Score: 24/100 (F — Critical)
+
+🔴 3 API keys in plaintext config
+🔴 Gateway bound to 0.0.0.0
+🔴 Auth token: 16 characters
+🟡 No .gitignore for secrets
+🟡 PII detected in session logs
+🟡 Shell access unrestricted
+🔵 No retention policy
+🔵 No monitoring
+```
+**You don't know what you don't know.**
+
+</td>
+<td width="50%">
+
+### 🛡️ After `--fix`
+```
+Score: 93/100 (A+ — Excellent)
+
+✅ Keys moved to .env
+✅ Gateway bound to 127.0.0.1
+✅ 64-char random auth token
+✅ .gitignore updated
+✅ Log scrubbing enabled
+✅ Tool allowlist configured
+✅ 30-day retention set
+✅ Monitoring enabled
+```
+**93 points in 3 seconds.**
+
+</td>
+</tr>
+</table>
+
+<br>
+
+---
+
+<br>
+
+## 🚀 Quick Start
 
 ```bash
+# One command. That's it.
 npx clawhatch scan
 ```
 
-No installation required. Clawhatch auto-detects your OpenClaw installation at `~/.openclaw` (or `%APPDATA%\openclaw` on Windows).
-
-## Installation
-
 ```bash
-npm install -g clawhatch
+# Want the full picture? Scan workspace files too.
+npx clawhatch scan --workspace .
 ```
 
-## Usage
-
 ```bash
-# Basic scan — auto-detects your OpenClaw config
-clawhatch scan
-
-# Scan with workspace files (SOUL.md, skills, markdown)
-clawhatch scan --workspace .
-
-# Deep scan — analyze full session logs (slower)
-clawhatch scan --deep
-
-# JSON output for scripting and CI
-clawhatch scan --json
-
-# HTML report
-clawhatch scan --format html
-
-# Auto-fix safe issues (prompts for behavioral changes)
-clawhatch scan --fix
-
-# Custom OpenClaw installation path
-clawhatch scan --path /custom/path
-
-# Combine flags
-clawhatch scan --workspace . --deep --fix
+# Auto-fix everything it can (backs up config first)
+npx clawhatch scan --fix
 ```
 
-## Example Output
+<br>
+
+---
+
+<br>
+
+## 🔍 What It Scans
+
+<table>
+<tr>
+<td align="center" width="20%">
+
+🔐
+#### Identity & Access
+**15 checks**
+DM policies, allowlists, pairing, access groups, OAuth
+
+</td>
+<td align="center" width="20%">
+
+🌐
+#### Network
+**10 checks**
+Gateway binding, auth mode, TLS, CORS, port exposure
+
+</td>
+<td align="center" width="20%">
+
+📦
+#### Sandbox
+**8 checks**
+Exec policies, workspace access, Docker isolation
+
+</td>
+<td align="center" width="20%">
+
+🔑
+#### Secrets
+**30 checks**
+API keys in config/logs, .env perms, key rotation
+
+</td>
+<td align="center" width="20%">
+
+🛠️
+#### Tools
+**20 checks**
+Shell access, Docker socket, dangerous combos, timeouts
+
+</td>
+</tr>
+<tr>
+<td align="center">
+
+🧩
+#### Skills
+**12 checks**
+Untrusted sources, eval(), native modules, sandboxing
+
+</td>
+<td align="center">
+
+🤖
+#### Model
+**7 checks**
+Legacy models, injection risk, SOUL.md exposure
+
+</td>
+<td align="center">
+
+☁️
+#### Cloud Sync
+**1 check**
+iCloud, OneDrive, Dropbox, Google Drive detection
+
+</td>
+<td align="center">
+
+💾
+#### Data
+**10 checks**
+PII in logs, retention, encryption at rest, backups
+
+</td>
+<td align="center">
+
+⚙️
+#### Operational
+**7 checks**
+Logging, monitoring, health checks, git secrets
+
+</td>
+</tr>
+</table>
+
+<br>
+
+---
+
+<br>
+
+## 📊 Example Output
 
 ```
   Clawhatch Security Scanner v0.1.0
 
-  Clawhatch Security Scan
-  ==================================================
-
-  Security Score: 72/100 (B — Acceptable)
+  ══════════════════════════════════════════════════
+  ██  Security Score: 40/100 (D — Poor)         ██
+  ══════════════════════════════════════════════════
 
   Platform: win32
-  OpenClaw: 1.2.0
-  Checks: 100 run, 94 passed, 6 findings
-  Duration: 842ms
-  Scanned: 14 files
+  Checks: 100 run, 89 passed, 11 findings
+  Duration: 276ms · Scanned: 27 files
 
-  --------------------------------------------------
+  ──────────────────────────────────────────────────
 
-  HIGH (2 findings)
+  🔴 CRITICAL (1)
 
-  ! Gateway auth token is weak
-     Auth token is short or low-entropy (< 32 characters)
-     Risk: Weak tokens can be brute-forced
-     Fix: Generate a strong token: openssl rand -hex 32
+  !! API key(s) found in openclaw.json
+     2 hardcoded API key(s) — move all to .env
+     Risk: Keys exposed if config is shared or committed
+     Fix: Move to .env, use ${VAR_NAME} substitution
 
-  ! Session logs contain potential secrets
-     API keys or tokens detected in session log files
-     Risk: Secrets persisted in plaintext logs
-     Fix: Enable log sanitization and rotate exposed keys
+  🟡 HIGH (2)
 
-  MEDIUM (3 findings)
+  ! OAuth token in session log
+     Bearer token values detected in session logs
+     Fix: Enable session log scrubbing
 
-  ~ DM policy set to "open"
-     Channel accepts messages from any sender
-     Risk: Unauthorized users can interact with the agent
-     Fix: Set dmPolicy to "allowlist" and configure allowFrom
+  ! Session log may contain PII
+     Patterns resembling personal data (email, phone)
+     Fix: Enable PII scrubbing or reduce log verbosity
 
-  ~ No tool rate limiting configured
-     Tool execution has no throttle (tools.rateLimit missing)
-     Risk: Rapid tool invocation can spam external APIs
-     Fix: Set tools.rateLimit in openclaw.json (e.g., 60)
+  🔵 MEDIUM (4)
 
-  ~ Session log retention not configured
-     No sessionLogTTL set — logs kept indefinitely
-     Risk: Stale data accumulation and potential compliance issues
-     Fix: Set retention.sessionLogTTL (e.g., 30 days)
+  ~ Credentials in error messages
+  ~ No tool allowlist configured
+  ~ Shell commands may contain secrets
+  ~ No data retention policy
 
-  LOW (1 finding)
+  ⚪ LOW (4)
 
-  - No health check endpoint configured
-     Gateway has no monitoring.enabled setting
-     Risk: No automated way to verify agent is running correctly
-     Fix: Enable monitoring in openclaw.json
+  - Large session log (15.0MB) — sampled
+  - Reasoning enabled in group contexts
+  - Verbose mode enabled in group contexts
+  - No log rotation configured
 
-  ==================================================
+  ──────────────────────────────────────────────────
 
-  3 issue(s) can be auto-fixed. Run with --fix
-  Run with --json for machine-readable output
-  Run with --deep for thorough session log scanning
+  ⚡ 3 issue(s) can be auto-fixed → run with --fix
 ```
 
-## What It Checks
+<br>
 
-Clawhatch runs 100 checks across **10 security categories**:
+---
 
-| Category | Checks | What It Covers |
-|----------|--------|----------------|
-| **Identity & Access** | 15 | DM policies, allowlists, pairing config, access groups, OAuth, API key rotation |
-| **Network Exposure** | 10 | Gateway binding, auth mode, TLS, trusted proxies, insecure auth flags |
-| **Sandbox Configuration** | 8 | Sandbox mode, workspace access, Docker isolation, browser host control |
-| **Secret Scanning** | 10 | Hardcoded API keys, .env permissions, secrets in markdown, session log leakage |
-| **Model Security** | 7 | Model config, legacy models, injection resistance, SOUL.md analysis, fallback order |
-| **Cloud Sync** | 1 | iCloud, OneDrive, Dropbox, Google Drive detection |
-| **Tool Security** | 20 | Elevated tools, command injection, Docker socket exposure, audit logging |
-| **Skill Security** | 12 | Untrusted sources, dangerous dependencies, native modules, sandboxing |
-| **Data Protection** | 10 | PII in logs, retention policies, encryption at rest, log rotation |
-| **Operational** | 7 | Logging config, monitoring, git secrets, health checks, dependency staleness |
+<br>
 
-## Scoring
+## 🏆 Scoring System
 
-Clawhatch uses a **100-point scoring system** with severity-based penalties:
+<table>
+<tr>
+<td align="center"><h1>A+</h1>90–100<br><strong>Excellent</strong></td>
+<td align="center"><h1>A</h1>80–89<br><strong>Good</strong></td>
+<td align="center"><h1>B</h1>70–79<br><strong>Acceptable</strong></td>
+<td align="center"><h1>C</h1>50–69<br><strong>Needs Work</strong></td>
+<td align="center"><h1>D</h1>30–49<br><strong>Poor</strong></td>
+<td align="center"><h1>F</h1>0–29<br><strong>Critical</strong></td>
+</tr>
+</table>
 
-| Severity | Penalty per finding |
-|----------|---------------------|
-| Critical | −15 points |
-| High | −8 points |
-| Medium | −3 points |
-| Low | −1 point |
+| Severity | Penalty |
+|----------|---------|
+| 🔴 Critical | **−15 points** (hard-caps score at 40) |
+| 🟡 High | −8 points |
+| 🔵 Medium | −3 points |
+| ⚪ Low | −1 point |
 
-**Critical cap:** Any critical finding hard-caps the score at **40**, regardless of calculated total. Fix critical issues first.
+> **⚠️ Critical cap:** Any critical finding locks your score at **40 max**. Fix critical issues first.
 
-### Grade Scale
+<br>
 
-| Score | Grade | Label |
-|-------|-------|-------|
-| 90–100 | A+ | Excellent |
-| 80–89 | A | Good |
-| 70–79 | B | Acceptable |
-| 50–69 | C | Needs Work |
-| 30–49 | D | Poor |
-| 0–29 | F | Critical |
+---
 
-## Auto-Fix (`--fix`)
+<br>
 
-When you run `clawhatch scan --fix`, the scanner applies fixes in two tiers:
-
-**Safe fixes** — applied automatically:
-- File permission corrections (e.g., tightening `.env` to 600)
-- Adding secrets to `.gitignore`
-- Generating strong replacement tokens
-
-**Behavioral fixes** — prompts for confirmation:
-- Changing DM policies from "open" to "allowlist"
-- Enabling sandbox mode
-- Modifying gateway bind addresses
-
-All fixes create timestamped backups (`.bak.<timestamp>`) before modifying any file.
-
-## JSON Export (`--json`)
+## 🔧 Auto-Fix (`--fix`)
 
 ```bash
-clawhatch scan --json > report.json
+npx clawhatch scan --fix
 ```
 
-Outputs a structured `ScanResult` object:
+| Fix Type | Action | Example |
+|----------|--------|---------|
+| ✅ **Safe** (automatic) | Applied instantly | Move API keys to .env, add .gitignore entries, generate strong tokens |
+| ⚠️ **Behavioral** (prompts) | Asks before changing | Change DM policy to allowlist, enable sandbox, rebind gateway |
 
-```json
-{
-  "timestamp": "2026-02-06T12:00:00.000Z",
-  "openclawVersion": "1.2.0",
-  "score": 82,
-  "findings": [
-    {
-      "id": "NETWORK-001",
-      "severity": "CRITICAL",
-      "confidence": "high",
-      "category": "Network Exposure",
-      "title": "Gateway bound to 0.0.0.0",
-      "description": "...",
-      "risk": "...",
-      "remediation": "...",
-      "autoFixable": true,
-      "fixType": "behavioral"
-    }
-  ],
-  "suggestions": [],
-  "summary": {
-    "score": 82,
-    "grade": "A",
-    "label": "Good",
-    "critical": 0,
-    "high": 1,
-    "medium": 2,
-    "low": 0,
-    "suggestions": 3,
-    "autoFixable": 1
-  },
-  "filesScanned": 14,
-  "checksRun": 100,
-  "checksPassed": 97,
-  "duration": 1234,
-  "platform": "win32"
-}
+**Every fix creates a timestamped backup** (`.bak.<timestamp>`) before touching your config. Zero risk.
+
+<br>
+
+---
+
+<br>
+
+## 📋 All Commands
+
+```bash
+clawhatch scan                        # Basic scan
+clawhatch scan --workspace .          # Include workspace files (SOUL.md, skills)
+clawhatch scan --deep                 # Full session log analysis
+clawhatch scan --fix                  # Auto-fix safe issues
+clawhatch scan --json                 # JSON output for CI/CD
+clawhatch scan --format html          # HTML report
+clawhatch scan --path /custom/path    # Custom OpenClaw path
+clawhatch scan --share                # Share anonymized results with community
+
+clawhatch init                        # Generate hardened baseline config
+clawhatch threats                     # View community threat feed
+clawhatch subscribe --webhook URL     # Alert on new threats
 ```
 
-### Exit Codes
+<br>
 
-| Code | Meaning |
-|------|---------|
-| `0` | Scan passed (no critical findings) |
-| `1` | Critical findings detected |
+---
 
-## Findings vs. Suggestions
+<br>
 
-Clawhatch separates output into two groups:
-
-- **Findings** (high/medium confidence) — count toward your score and represent actionable security issues.
-- **Suggestions** (low confidence) — informational recommendations that do not affect your score.
-
-## CI/CD Integration
+## 🤖 CI/CD Integration
 
 ### GitHub Actions
 
@@ -270,99 +359,121 @@ jobs:
           path: clawhatch-report.json
 ```
 
-## Platform Support
+<br>
 
-| Platform | Status | Notes |
-|----------|--------|-------|
-| **Windows** | ✅ Supported | Full support including `%APPDATA%\openclaw` detection |
-| **Linux** | 🔄 Coming soon | Core checks work, platform-specific checks in progress |
-| **macOS** | 🔄 Coming soon | Core checks work, platform-specific checks in progress |
+---
 
-## Other Commands
+<br>
 
-### `clawhatch init`
+## 📡 Community Threat Intelligence
 
-Generate a secure baseline OpenClaw configuration:
+Share anonymized results. Get collective immunity.
 
 ```bash
-clawhatch init
-clawhatch init --path /custom/path
+clawhatch scan --share          # Upload anonymized findings
+clawhatch threats               # View trending threats
+clawhatch subscribe --webhook https://discord.com/api/webhooks/...
 ```
 
-Creates a hardened `openclaw.json` and `.env` template with secure defaults.
+**What gets shared:** Check IDs + severity only. **What never leaves your machine:** File paths, secrets, descriptions, config values.
 
-## Community Threat Intelligence
+> If 45% of users suddenly have NETWORK-001, that's flagged as trending. Subscribers with that vulnerability get an instant webhook alert.
 
-Clawhatch includes a community threat intelligence network. When you share your scan results, they're anonymized and aggregated to protect everyone:
+<br>
 
-### Share your results
+---
+
+<br>
+
+## 📦 JSON Export
 
 ```bash
-clawhatch scan --share              # Anonymize and share with community
-clawhatch scan --upload             # Same as --share
+clawhatch scan --json > report.json
 ```
 
-Only check IDs, severity levels, and categories are shared. **No file paths, secrets, or descriptions ever leave your machine.**
-
-### View community threats
-
-```bash
-clawhatch threats                   # View the community threat feed
+```json
+{
+  "score": 82,
+  "summary": {
+    "grade": "A",
+    "critical": 0,
+    "high": 1,
+    "medium": 2,
+    "low": 0,
+    "autoFixable": 1
+  },
+  "findings": [ ... ],
+  "checksRun": 100,
+  "duration": 276,
+  "platform": "win32"
+}
 ```
 
-Shows the top threats across all users, trending attacks, new advisories, and the community average score.
+| Exit Code | Meaning |
+|-----------|---------|
+| `0` | Scan passed (no critical findings) |
+| `1` | Critical findings detected |
 
-### Subscribe to alerts
+<br>
 
-```bash
-clawhatch subscribe --webhook https://discord.com/api/webhooks/...   # Discord
-clawhatch subscribe --webhook https://hooks.slack.com/services/...   # Slack
-clawhatch subscribe --threshold CRITICAL                             # Only critical alerts
-```
+---
 
-When a new threat is detected across the community, subscribers are notified instantly via their configured webhook.
+<br>
 
-### How it works
+## 💻 Platform Support
 
-1. You run `clawhatch scan --share`
-2. Findings are stripped to just check IDs + severity (no file paths, no secrets)
-3. Anonymized report is uploaded to the community feed
-4. If 45% of users suddenly have NETWORK-001, that's flagged as trending
-5. Subscribers with that vulnerability get an instant webhook alert
+| Platform | Status |
+|----------|--------|
+| **Windows** | ✅ Full support |
+| **Linux** | ✅ Core checks (platform-specific expanding) |
+| **macOS** | ✅ Core checks (platform-specific expanding) |
 
-### Privacy
+<br>
 
-- Instance ID is a SHA-256 hash of your hostname -- we never see your actual machine name
-- No file paths, descriptions, or secret values are ever transmitted
-- You can inspect exactly what's sent with `clawhatch scan --json --share`
+---
 
-## Requirements
+<br>
 
-- **Node.js** >= 18.0.0
-- **OpenClaw** installed (auto-detected or specify with `--path`)
+## 🎨 Brand
 
-## Brand
+| | Color | Hex |
+|--|-------|-----|
+| 🔴 | Clawhatch Red | `#C41E3A` |
+| ⬛ | Deep Navy | `#1A1A2E` |
+| 🟥 | Alert Red | `#FF4D4D` |
+| 🩷 | Scan Pink | `#FF8080` |
 
-| Element | Value |
-|---------|-------|
-| **Primary** | `#C41E3A` (Clawhatch Red) |
-| **Dark** | `#1A1A2E` (Deep Navy) |
-| **Accent** | `#FF4D4D` (Alert Red) |
-| **Soft** | `#FF8080` (Scan Pink) |
-| **Background** | `#16213E` → `#0F3460` (gradient) |
+Logo and banner: [`assets/`](assets/)
 
-Logo and banner assets are in [`assets/`](assets/).
+<br>
 
-## Contributing
+---
 
-Contributions welcome! Please see the [GitHub repository](https://github.com/wlshlad85/clawhatch) for details.
+<br>
+
+## 🤝 Contributing
 
 1. Fork the repo
 2. Create a feature branch (`git checkout -b feat/my-check`)
-3. Add your checks following the existing pattern in `src/checks/`
-4. Run tests: `npm test`
+3. Add checks following the pattern in `src/checks/`
+4. Run tests: `npm test` (301 passing)
 5. Submit a PR
 
-## License
+<br>
+
+## 📄 License
 
 [MIT](LICENSE) © Clawhatch
+
+<br>
+
+---
+
+<p align="center">
+  <strong>Built by a solo developer in Cardiff 🏴󠁧󠁢󠁷󠁬󠁳󠁿 who found 3 API keys in his own config.</strong><br>
+  <em>If it happened to me, it's happening to you.</em>
+</p>
+
+<p align="center">
+  <code>npx clawhatch scan</code>
+</p>
