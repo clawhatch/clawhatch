@@ -345,7 +345,13 @@ export async function runToolChecks(
   }
 
   // TOOLS-017: No command audit trail
-  if (!config.tools?.auditLog) {
+  // Only fire if elevated tools are configured or exec/shell tools are present
+  // (no point flagging audit trail if there are no risky tools to audit)
+  const hasRiskyTools = elevated.length > 0 ||
+    dangerousElevated.length > 0 ||
+    config.sandbox?.workspaceAccess === "rw";
+
+  if (!config.tools?.auditLog && hasRiskyTools) {
     findings.push({
       id: "TOOLS-017",
       severity: Severity.Medium,

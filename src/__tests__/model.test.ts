@@ -265,16 +265,38 @@ describe("runModelChecks", () => {
 
   // === MODEL-013: No output filtering ===
   describe("MODEL-013 — No output filtering", () => {
-    it("flags missing output filtering as LOW", async () => {
-      const config = makeConfig({});
+    it("flags missing output filtering as LOW when elevated tools exist", async () => {
+      // MODEL-013 now only fires when elevated tools or external channels exist
+      const config = makeConfig({
+        tools: { elevated: ["exec"] },
+      });
       const findings = await runModelChecks(config, null);
       const f = findings.find((f) => f.id === "MODEL-013");
-      assert.ok(f, "MODEL-013 should be present");
+      assert.ok(f, "MODEL-013 should be present with elevated tools");
       assert.equal(f.severity, Severity.Low);
     });
 
+    it("flags missing output filtering with external channels", async () => {
+      const config = makeConfig({
+        channels: {
+          discord: { dmPolicy: "open" },
+        },
+      });
+      const findings = await runModelChecks(config, null);
+      const f = findings.find((f) => f.id === "MODEL-013");
+      assert.ok(f, "MODEL-013 should be present with external channels");
+    });
+
+    it("does NOT flag without elevated tools or external channels", async () => {
+      // No elevated tools, no external channels - MODEL-013 should not fire
+      const config = makeConfig({});
+      const findings = await runModelChecks(config, null);
+      const f = findings.find((f) => f.id === "MODEL-013");
+      assert.equal(f, undefined, "MODEL-013 should not fire without risk factors");
+    });
+
     it("does NOT flag config with filter keyword", async () => {
-      const config = makeConfig();
+      const config = makeConfig({ tools: { elevated: ["exec"] } });
       (config as Record<string, unknown>).output_guard = { enabled: true };
       const findings = await runModelChecks(config, null);
       const f = findings.find((f) => f.id === "MODEL-013");

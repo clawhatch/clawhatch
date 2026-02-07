@@ -22,7 +22,7 @@ import { scan } from "./scanner.js";
 import { reportFindings, reportJson } from "./reporter.js";
 import { generateHtmlReport } from "./reporter-html.js";
 import { applyFixes } from "./fixer.js";
-import { sanitizeFindings } from "./sanitize.js";
+import { sanitizeFindings, redactPaths } from "./sanitize.js";
 import { initSecureConfig } from "./init.js";
 import { anonymizeScanResult, uploadThreatReport } from "./telemetry.js";
 import { DEFAULT_API_URL, fetchThreatFeed, formatThreatFeed, checkAgainstFeed } from "./threat-feed.js";
@@ -46,6 +46,7 @@ program
   .option("--deep", "Deep scan — full session log analysis (slower)")
   .option("--share", "Anonymize and share results with community threat feed")
   .option("--upload", "Alias for --share")
+  .option("--redact-paths", "Redact file paths in output (for sharing results)")
   .action(async (options) => {
     // --json flag is an alias for --format json
     const format: string = options.json ? "json" : options.format;
@@ -63,6 +64,12 @@ program
       json: format === "json",
       upload: shouldShare,
     });
+
+    // Apply path redaction if requested
+    if (options.redactPaths) {
+      result.findings = redactPaths(result.findings);
+      result.suggestions = redactPaths(result.suggestions);
+    }
 
     // Output results
     if (format === "json") {

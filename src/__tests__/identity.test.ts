@@ -87,18 +87,30 @@ describe("runIdentityChecks", () => {
   it("returns no channel findings for empty config", async () => {
     const config = makeConfig({});
     const findings = await runIdentityChecks(config, emptyFiles);
-    // Should only have IDENTITY-013 (always present)
+    // No channel findings for empty config, and no IDENTITY-013 without credential files
     const channelFindings = findings.filter(
       (f) => f.id !== "IDENTITY-013"
     );
     assert.equal(channelFindings.length, 0);
   });
 
-  it("always includes IDENTITY-013 (no rotation evidence)", async () => {
+  it("includes IDENTITY-013 when credential files exist (no rotation evidence)", async () => {
+    // IDENTITY-013 now only fires when there are credential files
+    const config = makeConfig({});
+    const filesWithCreds = { 
+      credentialFiles: ["/path/to/discord.json"], 
+      authProfileFiles: [] 
+    };
+    const findings = await runIdentityChecks(config, filesWithCreds);
+    const f = findings.find((f) => f.id === "IDENTITY-013");
+    assert.ok(f, "IDENTITY-013 should be present when credential files exist");
+    assert.equal(f.severity, Severity.Low);
+  });
+
+  it("does NOT include IDENTITY-013 when no credential files exist", async () => {
     const config = makeConfig({});
     const findings = await runIdentityChecks(config, emptyFiles);
     const f = findings.find((f) => f.id === "IDENTITY-013");
-    assert.ok(f, "IDENTITY-013 should always be present");
-    assert.equal(f.severity, Severity.Low);
+    assert.equal(f, undefined, "IDENTITY-013 should not fire without credential files");
   });
 });

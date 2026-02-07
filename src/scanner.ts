@@ -34,6 +34,59 @@ import { join } from "node:path";
 
 const execFileAsync = promisify(execFile);
 
+/**
+ * Deduplicate findings by check ID.
+ * When the same check fires for multiple files (e.g., SECRET-005 for each credential file),
+ * aggregate them into a single finding with updated description showing the count and file list.
+ */
+function deduplicateFindings(findings: Finding[]): Finding[] {
+  const grouped = new Map<string, Finding[]>();
+
+  for (const f of findings) {
+    const existing = grouped.get(f.id) || [];
+    existing.push(f);
+    grouped.set(f.id, existing);
+  }
+
+  const deduplicated: Finding[] = [];
+  for (const [id, group] of grouped) {
+    if (group.length === 1) {
+      deduplicated.push(group[0]);
+    } else {
+      // Aggregate multiple findings with same ID
+      const first = group[0];
+      const files = group.map((f) => f.file).filter(Boolean) as string[];
+      const uniqueFiles = [...new Set(files)];
+
+      // Build aggregated description
+      let description = first.description;
+      if (uniqueFiles.length > 1) {
+        const fileList =
+          uniqueFiles.length <= 3
+            ? uniqueFiles.map((f) => f.split(/[/\\]/).pop()).join(", ")
+            : `${uniqueFiles.slice(0, 3).map((f) => f.split(/[/\\]/).pop()).join(", ")}... and ${uniqueFiles.length - 3} more`;
+        description = `${first.title} (${group.length} occurrences in: ${fileList})`;
+      }
+
+      deduplicated.push({
+        ...first,
+        description,
+        // Keep the first file for reference, but note there are more
+        file: uniqueFiles[0],
+      });
+    }
+  }
+
+  return deduplicated;
+}
+
+/**
+ * TOTAL_CHECKS: This is the "marketed" number of checks (100-point audit).
+ * The actual number of check IDs varies based on config and files found,
+ * since some checks only fire conditionally. We track checksRun separately
+ * from this constant, which represents the maximum possible checks in a
+ * comprehensive scan. The score formula uses actual findings, not this number.
+ */
 const TOTAL_CHECKS = 100;
 
 /**
@@ -208,15 +261,20 @@ export async function scan(options: ScanOptions): Promise<ScanResult> {
   const cloudFindings = await runCloudSyncCheck(openclawDir);
   allFindings.push(...cloudFindings);
 
-  // Step 4: Separate findings from suggestions
-  const findings = allFindings.filter((f) => f.confidence !== "low");
-  const suggestions = allFindings.filter((f) => f.confidence === "low");
+  // Step 4: Deduplicate findings by check ID
+  // When the same issue (e.g., SECRET-005 for loose permissions) appears in multiple files,
+  // aggregate them into a single finding with a count, rather than N separate findings.
+  const deduplicatedFindings = deduplicateFindings(allFindings);
 
-  // Step 5: Sanitize (strip any accidental secret values)
+  // Step 5: Separate findings from suggestions
+  const findings = deduplicatedFindings.filter((f) => f.confidence !== "low");
+  const suggestions = deduplicatedFindings.filter((f) => f.confidence === "low");
+
+  // Step 6: Sanitize (strip any accidental secret values)
   const sanitizedFindings = sanitizeFindings(findings);
   const sanitizedSuggestions = sanitizeFindings(suggestions);
 
-  // Step 6: Calculate score (only high-confidence findings count)
+  // Step 7: Calculate score (only high-confidence findings count)
   const score = calculateScore(sanitizedFindings);
 
   const duration = Date.now() - startTime;

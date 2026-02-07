@@ -271,18 +271,42 @@ export const runIdentityChecks: CheckFn = async (config, files) => {
   }
 
   // Check 13: API key rotation schedule (low confidence)
-  // Heuristic: look for rotation-related comments in config
-  findings.push({
-    id: "IDENTITY-013",
-    severity: Severity.Low,
-    confidence: "low",
-    category: "Identity & Access",
-    title: "No API key rotation evidence",
-    description: "No rotation schedule, comments, or documentation found for API keys",
-    risk: "Long-lived API keys increase exposure window if compromised",
-    remediation: "Document your key rotation schedule and set calendar reminders",
-    autoFixable: false,
-  });
+  // Only fire if we actually found credential files or auth profiles to rotate
+  // Also check for rotation evidence: multiple key patterns, recent .env modification, etc.
+  if (files.credentialFiles.length > 0 || files.authProfileFiles.length > 0) {
+    // Heuristic: check if there are signs of rotation (multiple similar key patterns, _old suffix, etc.)
+    let hasRotationEvidence = false;
+
+    // Check credential files for rotation patterns
+    for (const credFile of [...files.credentialFiles, ...files.authProfileFiles].slice(0, 5)) {
+      try {
+        const { readFile } = await import("node:fs/promises");
+        const content = await readFile(credFile, "utf-8");
+        // Look for rotation-related patterns
+        if (/(?:_old|_backup|_previous|rotated|expired)/i.test(content) ||
+            /(?:rotation|rotate_at|expires_at|valid_until)/i.test(content)) {
+          hasRotationEvidence = true;
+          break;
+        }
+      } catch {
+        // Can't read file
+      }
+    }
+
+    if (!hasRotationEvidence) {
+      findings.push({
+        id: "IDENTITY-013",
+        severity: Severity.Low,
+        confidence: "low",
+        category: "Identity & Access",
+        title: "No API key rotation evidence",
+        description: `${files.credentialFiles.length + files.authProfileFiles.length} credential file(s) found with no rotation schedule or documentation`,
+        risk: "Long-lived API keys increase exposure window if compromised",
+        remediation: "Document your key rotation schedule and set calendar reminders",
+        autoFixable: false,
+      });
+    }
+  }
 
   // Check 14: Channel bot tokens in env, not config
   // We check this in secrets.ts more thoroughly — here we check config structure

@@ -30,8 +30,10 @@ function getCloudServices(): CloudService[] {
       { name: "Google Drive", paths: [`${home}/Google Drive`, `${home}/Library/CloudStorage/GoogleDrive`] },
     );
   } else if (os === "win32") {
+    // FIX: Removed duplicate path — `home` already contains the full path like C:\Users\RICHARD
+    // so we don't need to construct C:\Users\<username> separately
     services.push(
-      { name: "OneDrive", paths: [`${home}\\OneDrive`, `C:\\Users\\${home.split("\\").pop()}\\OneDrive`] },
+      { name: "OneDrive", paths: [`${home}\\OneDrive`] },
       { name: "Dropbox", paths: [`${home}\\Dropbox`] },
       { name: "Google Drive", paths: [`${home}\\Google Drive`] },
       { name: "iCloud Drive", paths: [`${home}\\iCloudDrive`] },

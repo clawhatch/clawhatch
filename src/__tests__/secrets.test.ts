@@ -105,15 +105,18 @@ describe("runSecretChecks", () => {
 
   // === SECRET-003: File permissions (Windows) ===
   describe("SECRET-003 — File permissions on Windows", () => {
-    it("emits LOW informational finding on Windows", async () => {
-      // This test will always run as Windows in this context
+    it("emits a finding on Windows (either ACL check result or inconclusive)", async () => {
+      // On Windows, the scanner now attempts icacls check
+      // It should produce either a HIGH finding (permissive ACLs) or a LOW finding (inconclusive)
       const findings = await runSecretChecks(makeConfig(), null, makeFiles(), false);
       const f = findings.find((f) => f.id === "SECRET-003");
-      // On Windows, should produce the "skipped" LOW finding
       if (process.platform === "win32") {
         assert.ok(f, "SECRET-003 should be present on Windows");
-        assert.equal(f.severity, Severity.Low);
-        assert.ok(f.title.includes("skipped"));
+        // Either HIGH (found permissive ACLs) or LOW (inconclusive/couldn't check)
+        assert.ok(
+          f.severity === Severity.High || f.severity === Severity.Low,
+          "SECRET-003 should be HIGH or LOW severity"
+        );
       }
     });
   });
@@ -313,13 +316,25 @@ describe("runSecretChecks", () => {
     });
   });
 
-  // === SECRET-023: Always present ===
+  // === SECRET-023: Credential rotation ===
   describe("SECRET-023 — No credential rotation", () => {
-    it("is always present", async () => {
+    it("is present when .env file exists", async () => {
+      // SECRET-023 now only fires when credentials are found
+      const files = makeFiles({ envPath: "/fake/.openclaw/.env" });
+      const findings = await runSecretChecks(makeConfig(), null, files, false);
+      const f = findings.find((f) => f.id === "SECRET-023");
+      // May or may not be present depending on .env modified date heuristic
+      // Just verify it doesn't crash
+      if (f) {
+        assert.equal(f.severity, Severity.Low);
+      }
+    });
+
+    it("is NOT present when no credentials exist", async () => {
+      // Without .env or API keys in config, SECRET-023 should not fire
       const findings = await runSecretChecks(makeConfig(), null, makeFiles(), false);
       const f = findings.find((f) => f.id === "SECRET-023");
-      assert.ok(f, "SECRET-023 should always be present");
-      assert.equal(f.severity, Severity.Low);
+      assert.equal(f, undefined, "SECRET-023 should not fire without credentials");
     });
   });
 

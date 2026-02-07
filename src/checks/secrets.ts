@@ -94,19 +94,50 @@ export async function runSecretChecks(
     }
   }
 
-  // Checks 36-39: File permissions (Unix only, graceful skip on Windows)
+  // Checks 36-39: File permissions (Unix: chmod, Windows: icacls)
   if (platform() === "win32") {
-    findings.push({
-      id: "SECRET-003",
-      severity: Severity.Low,
-      confidence: "medium",
-      category: "Secret Scanning",
-      title: "File permission checks skipped on Windows",
-      description: "Unix file permission checks (chmod 600/700) cannot be verified on Windows",
-      risk: "Windows ACLs should be reviewed manually to restrict access to OpenClaw files",
-      remediation: "Verify that only your user account has access to ~/.openclaw/ via Windows Security settings",
-      autoFixable: false,
-    });
+    // FIX: Actually check Windows ACLs using icacls
+    try {
+      const { execFile: ef } = await import("node:child_process");
+      const { promisify: p } = await import("node:util");
+      const execAsync = p(ef);
+
+      const { stdout } = await execAsync(
+        "icacls",
+        [files.openclawDir],
+        { timeout: 5000, windowsHide: true }
+      );
+
+      // Check for overly permissive ACLs (Everyone, Users, or BUILTIN\Users with access)
+      const dangerousGroups = /\b(Everyone|Users|BUILTIN\\Users|Authenticated Users)\s*:\s*\((?!N\))/i;
+      if (dangerousGroups.test(stdout)) {
+        findings.push({
+          id: "SECRET-003",
+          severity: Severity.High,
+          confidence: "high",
+          category: "Secret Scanning",
+          title: "OpenClaw directory has permissive Windows ACLs",
+          description: "~/.openclaw/ is accessible by other users on this system (Everyone/Users group has access)",
+          risk: "Other users on this system can read your OpenClaw configuration and secrets",
+          remediation: "Run: icacls \"%USERPROFILE%\\.openclaw\" /inheritance:r /grant:r \"%USERNAME%:F\"",
+          autoFixable: false,
+          file: files.openclawDir,
+        });
+      }
+    } catch {
+      // icacls failed or not available — fall back to informational message
+      findings.push({
+        id: "SECRET-003",
+        severity: Severity.Low,
+        confidence: "medium",
+        category: "Secret Scanning",
+        title: "Windows ACL check inconclusive",
+        description: "Could not verify Windows file permissions (icacls unavailable or failed)",
+        risk: "Windows ACLs should be reviewed manually to restrict access to OpenClaw files",
+        remediation: "Verify that only your user account has access to ~/.openclaw/ via Windows Security settings",
+        autoFixable: false,
+      });
+    }
   } else {
     // Check 36: ~/.openclaw/ directory permissions = 700
     try {
@@ -518,17 +549,47 @@ export async function runSecretChecks(
   }
 
   // SECRET-023: No credential rotation policy
-  findings.push({
-    id: "SECRET-023",
-    severity: Severity.Low,
-    confidence: "low",
-    category: "Secret Scanning",
-    title: "No credential rotation evidence",
-    description: "No evidence of key rotation policy (no expiry dates, rotation scripts, or documentation)",
-    risk: "Long-lived credentials increase exposure window if compromised",
-    remediation: "Implement a key rotation schedule and document the rotation procedure",
-    autoFixable: false,
-  });
+  // Only fire if we actually found credentials to rotate (env file with keys, or API keys in config)
+  const hasCredentials = files.envPath ||
+    (configRaw && API_KEY_PATTERNS.some((p) => p.test(configRaw)));
+
+  if (hasCredentials) {
+    // Check for rotation evidence in .env files
+    let hasRotationEvidence = false;
+    if (files.envPath) {
+      try {
+        const envContent = await readFile(files.envPath, "utf-8");
+        // Look for rotation-related patterns
+        if (/(?:_OLD|_BACKUP|_PREVIOUS|ROTATED|EXPIRED)/i.test(envContent) ||
+            /(?:rotation|rotate_at|expires|valid_until)/i.test(envContent)) {
+          hasRotationEvidence = true;
+        }
+        // Also check file modification date - if modified recently, might indicate rotation
+        const envStat = await stat(files.envPath);
+        const daysSinceModified = (Date.now() - envStat.mtime.getTime()) / (1000 * 60 * 60 * 24);
+        if (daysSinceModified < 30) {
+          // Modified in last 30 days - possible rotation activity
+          hasRotationEvidence = true;
+        }
+      } catch {
+        // Can't read/stat
+      }
+    }
+
+    if (!hasRotationEvidence) {
+      findings.push({
+        id: "SECRET-023",
+        severity: Severity.Low,
+        confidence: "low",
+        category: "Secret Scanning",
+        title: "No credential rotation evidence",
+        description: "No evidence of key rotation policy (no expiry dates, rotation scripts, or recent credential updates)",
+        risk: "Long-lived credentials increase exposure window if compromised",
+        remediation: "Implement a key rotation schedule and document the rotation procedure",
+        autoFixable: false,
+      });
+    }
+  }
 
   // SECRET-024: Shared credentials across envs
   if (files.envPath && files.workspaceDir) {
@@ -671,11 +732,19 @@ export async function runSecretChecks(
       const { execFile: ef } = await import("node:child_process");
       const { promisify: p } = await import("node:util");
       const execAsync = p(ef);
+      const startTime = Date.now();
       const { stdout } = await execAsync(
         "git",
         ["log", "--oneline", "-50", "--format=%s"],
         { cwd: files.workspaceDir, timeout: 5000 }
       );
+      const duration = Date.now() - startTime;
+
+      // FIX: Log warning if git command takes >2s (may indicate large/slow repo)
+      if (duration > 2000) {
+        console.error(`  Warning: git log took ${duration}ms — consider optimizing git history`);
+      }
+
       const sensitiveCommit = /\b(?:password|token|secret|api[_-]?key)\s*[=:]/i.test(stdout);
       if (sensitiveCommit) {
         findings.push({

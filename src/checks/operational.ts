@@ -120,11 +120,19 @@ export async function runOperationalChecks(
       await access(join(files.workspaceDir, ".git"), constants.R_OK);
       // Check last 20 commits for secret patterns
       try {
+        const startTime = Date.now();
         const { stdout } = await execFileAsync(
           "git",
           ["log", "--oneline", "-20", "--diff-filter=A", "--name-only"],
           { cwd: files.workspaceDir, timeout: 5000 }
         );
+        const duration = Date.now() - startTime;
+
+        // FIX: Log warning if git command takes >2s (may indicate large/slow repo)
+        if (duration > 2000) {
+          console.error(`  Warning: git log took ${duration}ms — consider optimizing git history or increasing timeout`);
+        }
+
         const hasSecretFiles = /\.env|\.pem|\.key|id_rsa|credentials\.json|service-account/i.test(stdout);
         if (hasSecretFiles) {
           findings.push({

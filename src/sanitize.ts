@@ -65,3 +65,34 @@ function sanitizeFinding(finding: Finding): Finding {
 export function sanitizeFindings(findings: Finding[]): Finding[] {
   return findings.map(sanitizeFinding);
 }
+
+/**
+ * Redact file paths from findings for safe sharing.
+ * Replaces full paths with just the filename or a generic placeholder.
+ */
+export function redactPaths(findings: Finding[]): Finding[] {
+  return findings.map((finding) => {
+    let description = finding.description;
+
+    // Redact full paths in description, keeping just filename
+    // Windows paths: C:\Users\...\filename -> [path]/filename
+    // Unix paths: /home/user/.../filename -> [path]/filename
+    description = description.replace(
+      /[A-Z]:\\[^"'\s]+\\([^"'\s\\]+)/gi,
+      "[path]/$1"
+    );
+    description = description.replace(
+      /\/(?:home|Users|root|var|etc)[^"'\s]*\/([^"'\s/]+)/g,
+      "[path]/$1"
+    );
+
+    return {
+      ...finding,
+      description,
+      // Remove the file path entirely, keep just the line number concept
+      file: finding.file
+        ? `[redacted]/${finding.file.split(/[/\\]/).pop()}`
+        : undefined,
+    };
+  });
+}

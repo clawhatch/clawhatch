@@ -266,21 +266,43 @@ describe("runToolChecks", () => {
 
   // === TOOLS-017: No command audit trail ===
   describe("TOOLS-017 — No command audit trail", () => {
-    it("flags missing auditLog as MEDIUM", async () => {
-      const config = makeConfig({});
+    it("flags missing auditLog as MEDIUM when risky tools exist", async () => {
+      // TOOLS-017 now only fires when elevated tools or rw workspace exist
+      const config = makeConfig({
+        tools: { elevated: ["exec"] },
+      });
       const findings = await runToolChecks(config, makeFiles());
       const f = findings.find((f) => f.id === "TOOLS-017");
-      assert.ok(f, "TOOLS-017 should be present");
+      assert.ok(f, "TOOLS-017 should be present when elevated tools exist");
       assert.equal(f.severity, Severity.Medium);
+    });
+
+    it("flags missing auditLog with rw workspace", async () => {
+      const config = makeConfig({
+        sandbox: { workspaceAccess: "rw" },
+      });
+      const findings = await runToolChecks(config, makeFiles());
+      const f = findings.find((f) => f.id === "TOOLS-017");
+      assert.ok(f, "TOOLS-017 should be present with rw workspace");
     });
 
     it("does NOT flag when auditLog is true", async () => {
       const config = makeConfig({
-        tools: { auditLog: true },
+        tools: { auditLog: true, elevated: ["exec"] },
       });
       const findings = await runToolChecks(config, makeFiles());
       const f = findings.find((f) => f.id === "TOOLS-017");
       assert.equal(f, undefined);
+    });
+
+    it("does NOT flag when no risky tools or rw workspace", async () => {
+      // No elevated tools, no rw workspace - TOOLS-017 should not fire
+      const config = makeConfig({
+        sandbox: { workspaceAccess: "ro" },
+      });
+      const findings = await runToolChecks(config, makeFiles());
+      const f = findings.find((f) => f.id === "TOOLS-017");
+      assert.equal(f, undefined, "TOOLS-017 should not fire without risky tools");
     });
   });
 

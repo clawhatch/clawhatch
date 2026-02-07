@@ -304,18 +304,28 @@ export async function runModelChecks(
   }
 
   // Check 56 (MODEL-013): No output filtering
+  // Only fire if model has tool access (elevated tools) or external-facing channels
+  // For internal-only agents without tools, output filtering is less critical
+  const hasElevatedTools = config.tools?.elevated && config.tools.elevated.length > 0;
+  const hasExternalChannels = config.channels &&
+    Object.values(config.channels).some((ch) =>
+      ch.dmPolicy === "open" || ch.groupPolicy === "open" || ch.groupPolicy === "allowlist"
+    );
+
   if (!configStr.includes("filter") && !configStr.includes("output_guard") && !configStr.includes("content_policy")) {
-    findings.push({
-      id: "MODEL-013",
-      severity: Severity.Low,
-      confidence: "low",
-      category: "Model Security",
-      title: "No output filtering configured",
-      description: "No output filter, content policy, or output guard configuration found",
-      risk: "Agent outputs are not filtered — may contain harmful, sensitive, or incorrect content",
-      remediation: "Configure output filtering or content policies for production agents",
-      autoFixable: false,
-    });
+    if (hasElevatedTools || hasExternalChannels) {
+      findings.push({
+        id: "MODEL-013",
+        severity: Severity.Low,
+        confidence: "low",
+        category: "Model Security",
+        title: "No output filtering configured",
+        description: "No output filter, content policy, or output guard configuration found",
+        risk: "Agent outputs are not filtered — may contain harmful, sensitive, or incorrect content",
+        remediation: "Configure output filtering or content policies for production agents",
+        autoFixable: false,
+      });
+    }
   }
 
   // Check 57 (MODEL-014): Context window abuse
