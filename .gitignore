@@ -28,3 +28,10 @@ Thumbs.db
 
 # Misc
 NUL
+
+# Internal reports (not for public repo)
+*-REPORT.md
+*-HANDOFF.md
+TASK-COMPLETE.md
+MONITOR-QUICK-START.md
+MONITORING-IMPLEMENTATION.md

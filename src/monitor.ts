@@ -1,14 +1,9 @@
 /**
  * Clawhatch Monitor — Scheduled scanning and trend analysis.
  * 
- * Architecture:
  * - Stores scan results in ~/.clawhatch/history/ as timestamped JSON files
  * - Compares current scan to previous to detect changes
- * - Supports license key validation for paid features
  * - Generates trend reports showing score history and issue deltas
- * 
- * Free tier: Manual scans only
- * Paid tier: Scheduled monitoring + history + trend reports
  */
 
 import { readFile, writeFile, readdir, mkdir, stat } from "node:fs/promises";
