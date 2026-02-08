@@ -239,3 +239,46 @@ export interface DiscoveredFiles {
   openclawDir: string;
   workspaceDir: string | null;
 }
+
+/** Monitor configuration */
+export interface MonitorConfig {
+  enabled: boolean;
+  schedule: string;
+  lastRun?: string;
+  licenseKey?: string;
+  alertOnScoreChange?: boolean;
+  scoreChangeThreshold?: number;
+}
+
+/** History entry (stored scan result) */
+export interface HistoryEntry {
+  timestamp: string;
+  score: number;
+  findings: Finding[];
+  duration: number;
+  checksRun: number;
+}
+
+/** Trend report */
+export interface TrendReport {
+  periodStart: string;
+  periodEnd: string;
+  scans: number;
+  scoreMin: number;
+  scoreMax: number;
+  scoreAverage: number;
+  scoreCurrent: number;
+  trend: "improving" | "declining" | "stable";
+  newIssues: Finding[];
+  resolvedIssues: Finding[];
+  persistentIssues: Finding[];
+}
+
+/** Comparison result */
+export interface ComparisonResult {
+  newIssues: Finding[];
+  resolvedIssues: Finding[];
+  unchangedIssues: Finding[];
+  scoreChange: number;
+  scoreDelta: number;
+}

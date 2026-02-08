@@ -303,6 +303,53 @@ npx clawhatch scan --fix
 
 <br>
 
+## 📊 Monitoring & Trends
+
+Track your security posture over time with continuous monitoring:
+
+```bash
+# Manual scan with comparison to last scan
+npx clawhatch monitor
+
+# View scan history and monitoring status
+npx clawhatch monitor --status
+
+# Generate trend report (score trends, new/resolved issues)
+npx clawhatch monitor --report         # Paid tier
+
+# Start scheduled monitoring (daily scans)
+npx clawhatch monitor --start          # Paid tier
+
+# Stop scheduled monitoring
+npx clawhatch monitor --stop
+```
+
+### Features
+
+- **Scan history** — All scans saved to `~/.clawhatch/history/` as timestamped JSON
+- **Change detection** — Compares current scan to previous to highlight new/resolved issues
+- **Score trends** — Track security score over time with min/max/average
+- **Trend reports** — Shows improving/declining/stable trends with issue deltas
+
+### Free vs. Paid
+
+| Feature | Free Tier | Paid Tier |
+|---------|-----------|-----------|
+| Manual scans | ✅ | ✅ |
+| Scan history | ✅ | ✅ |
+| Change detection | ✅ | ✅ |
+| Scheduled monitoring | ❌ | ✅ |
+| Trend reports | ❌ | ✅ |
+| Score alerts | ❌ | ✅ |
+
+**License key:** Place your license in `~/.clawhatch/license.key` to unlock paid features.
+
+<br>
+
+---
+
+<br>
+
 ## 📋 All Commands
 
 ```bash
@@ -318,6 +365,12 @@ clawhatch scan --share                # Share anonymized results with community
 clawhatch init                        # Generate hardened baseline config
 clawhatch threats                     # View community threat feed
 clawhatch subscribe --webhook URL     # Alert on new threats
+
+clawhatch monitor                     # Manual scan + comparison to last scan
+clawhatch monitor --status            # View monitoring status and scan history
+clawhatch monitor --report            # Generate trend report (paid tier)
+clawhatch monitor --start             # Start scheduled monitoring (paid tier)
+clawhatch monitor --stop              # Stop scheduled monitoring
 ```
 
 <br>

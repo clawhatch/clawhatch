@@ -11,7 +11,7 @@
 import { stat, lstat, readlink, readdir, access, constants } from "node:fs/promises";
 import { homedir, platform } from "node:os";
 import { join, resolve } from "node:path";
-import { glob } from "glob";
+import fg from "fast-glob";
 import type { DiscoveredFiles } from "./types.js";
 
 /** Common alternative locations for OpenClaw installations */
@@ -171,7 +171,7 @@ export async function discoverFiles(
 
   // Auth profile files (agents/*/auth-profiles.json)
   try {
-    const matches = await glob("agents/*/auth-profiles.json", {
+    const matches = await fg("agents/*/auth-profiles.json", {
       cwd: resolvedRoot,
       absolute: true,
     });
@@ -182,7 +182,7 @@ export async function discoverFiles(
 
   // Session log files (agents/*/sessions/*.jsonl)
   try {
-    const matches = await glob("agents/*/sessions/*.jsonl", {
+    const matches = await fg("agents/*/sessions/*.jsonl", {
       cwd: resolvedRoot,
       absolute: true,
     });
@@ -193,7 +193,7 @@ export async function discoverFiles(
 
   // Skill files (managed)
   try {
-    const matches = await glob("skills/*/SKILL.md", {
+    const matches = await fg("skills/*/SKILL.md", {
       cwd: resolvedRoot,
       absolute: true,
     });
@@ -219,7 +219,7 @@ export async function discoverFiles(
 
     // memory/*.md
     try {
-      const matches = await glob("memory/*.md", {
+      const matches = await fg("memory/*.md", {
         cwd: wsResolved,
         absolute: true,
       });
@@ -230,7 +230,7 @@ export async function discoverFiles(
 
     // Workspace skills
     try {
-      const matches = await glob("skills/*/SKILL.md", {
+      const matches = await fg("skills/*/SKILL.md", {
         cwd: wsResolved,
         absolute: true,
       });
@@ -241,7 +241,7 @@ export async function discoverFiles(
 
     // Custom command files (.claude/commands/*.md)
     try {
-      const matches = await glob(".claude/commands/*.md", {
+      const matches = await fg(".claude/commands/*.md", {
         cwd: wsResolved,
         absolute: true,
       });
@@ -252,7 +252,7 @@ export async function discoverFiles(
 
     // Skill package.json files (workspace)
     try {
-      const matches = await glob("skills/*/package.json", {
+      const matches = await fg("skills/*/package.json", {
         cwd: wsResolved,
         absolute: true,
       });
@@ -263,10 +263,10 @@ export async function discoverFiles(
 
     // Private key files
     try {
-      const matches = await glob("**/*.{pem,key,p12}", {
+      const matches = await fg("**/*.{pem,key,p12}", {
         cwd: wsResolved,
         absolute: true,
-        maxDepth: 3,
+        deep: 3,
       });
       files.privateKeyFiles.push(...matches);
     } catch {
@@ -287,7 +287,7 @@ export async function discoverFiles(
 
   // Skill package.json files (openclaw dir)
   try {
-    const matches = await glob("skills/*/package.json", {
+    const matches = await fg("skills/*/package.json", {
       cwd: resolvedRoot,
       absolute: true,
     });

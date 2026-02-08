@@ -150,6 +150,10 @@ export function reportFindings(result: ScanResult): void {
   }
   console.log(chalk.dim("  Run with --json for machine-readable output"));
   console.log(chalk.dim("  Run with --deep for thorough session log scanning"));
+  console.log(chalk.dim("  Run with --share to contribute to community threat feed"));
+  console.log("");
+  console.log(chalk.cyan("  📊 Community threats: ") + chalk.underline("https://clawhatch.com"));
+  console.log(chalk.cyan("  📖 Full docs: ") + chalk.underline("https://clawhatch.com/docs"));
   console.log("");
 }
 
@@ -172,4 +176,10 @@ export function reportJson(result: ScanResult): void {
   };
 
   console.log(JSON.stringify(output, null, 2));
+}
+
+export function reportQuiet(result: ScanResult): void {
+  // Quiet mode: only output score and grade (for CI/CD scripting)
+  const { grade, label } = getScoreGrade(result.score);
+  console.log(`${result.score}/100 ${grade} (${label})`);
 }

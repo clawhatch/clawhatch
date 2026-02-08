@@ -1,6 +1,6 @@
 {
   "name": "clawhatch",
-  "version": "0.1.0",
+  "version": "0.2.1",
   "description": "Security scanner for OpenClaw AI agents — 100-point audit with auto-fix",
   "type": "module",
   "bin": {
@@ -60,7 +60,7 @@
   "dependencies": {
     "chalk": "5.4.1",
     "commander": "13.1.0",
-    "glob": "11.1.0",
+    "fast-glob": "^3.3.3",
     "json5": "2.2.3"
   },
   "devDependencies": {
