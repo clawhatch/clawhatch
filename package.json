@@ -52,7 +52,7 @@
   "bugs": {
     "url": "https://github.com/wlshlad85/clawhatch/issues"
   },
-  "author": "Clawhatch <security@clawhatch.com>",
+  "author": "Clawhatch <clawhatch@proton.me>",
   "license": "MIT",
   "engines": {
     "node": ">=18.0.0"

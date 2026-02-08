@@ -14,7 +14,7 @@ If you discover a security vulnerability in Clawhatch, please report it responsi
 
 ### How to Report
 
-1. **Email:** Send details to **security@clawhatch.com**
+1. **Email:** Send details to **clawhatch@proton.me**
 2. **Subject line:** `[SECURITY] Brief description of the issue`
 3. **Include:**
    - Description of the vulnerability
@@ -75,5 +75,5 @@ When using Clawhatch:
 
 ## Contact
 
-- Security issues: security@clawhatch.com
+- Security issues: clawhatch@proton.me
 - General issues: [GitHub Issues](https://github.com/wlshlad85/clawhatch/issues)
