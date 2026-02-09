@@ -1,6 +1,6 @@
 {
   "name": "clawhatch",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Security scanner for OpenClaw AI agents — 100-point audit with auto-fix",
   "type": "module",
   "bin": {

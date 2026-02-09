@@ -33,7 +33,7 @@ const program = new Command();
 program
   .name("clawhatch")
   .description("Security scanner for OpenClaw AI agents")
-  .version("0.2.1");
+  .version("0.2.2");
 
 program
   .command("scan")
@@ -55,7 +55,7 @@ program
     const shouldShare = !!(options.share || options.upload);
 
     if (format === "text") {
-      console.log(chalk.cyan("\n  Clawhatch Security Scanner v0.2.1\n"));
+      console.log(chalk.cyan("\n  Clawhatch Security Scanner v0.2.2\n"));
     }
 
     const result = await scan({
@@ -161,7 +161,8 @@ program
     const hasCritical = result.findings.some(
       (f) => f.severity === "CRITICAL"
     );
-    process.exit(hasCritical ? 1 : 0);
+    // Allow pending HTTP connections to close cleanly (avoids libuv assertion on Windows)
+    setTimeout(() => process.exit(hasCritical ? 1 : 0), 100);
   });
 
 program
@@ -169,7 +170,7 @@ program
   .description("Generate a secure baseline OpenClaw configuration")
   .option("-p, --path <path>", "Target directory", "~/.openclaw")
   .action(async (options) => {
-    console.log(chalk.cyan("\n  Clawhatch Config Generator v0.2.1\n"));
+    console.log(chalk.cyan("\n  Clawhatch Config Generator v0.2.2\n"));
 
     // FIX: Use os.homedir() for reliable cross-platform ~ expansion
     // process.env.HOME is undefined on Windows; USERPROFILE may have spaces

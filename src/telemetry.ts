@@ -17,7 +17,7 @@ export function getInstanceId(): string {
 /** Strip a ScanResult down to only safe-to-share metadata. */
 export function anonymizeScanResult(result: ScanResult): ThreatReport {
   return {
-    version: "0.1.0",
+    version: "0.2.2",
     timestamp: result.timestamp,
     instanceId: getInstanceId(),
     platform: result.platform,
