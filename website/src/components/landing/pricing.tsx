@@ -20,7 +20,7 @@ const tiers = [
     price: "License",
     period: "",
     blurb: "Unlock continuous watch via ~/.clawhatch/license.key",
-    cta: "Join waitlist",
+    cta: "Request access",
     href: "#signup",
     featured: true,
     features: [...PRODUCT.paidTier, "Everything in free tier", "Tasteful upsell in CLI"],

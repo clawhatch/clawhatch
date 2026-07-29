@@ -21,7 +21,19 @@ npm run build
 npm run typecheck
 ```
 
-## Vercel (exact settings)
+## Current deployment
+
+The verified static build is published from the repository's `gh-pages`
+branch.
+
+- Temporary live URL: `https://clawhatch.github.io/clawhatch/`
+- Canonical URL after the registrar cut-over: `https://clawhatch.co.uk`
+- DNS instructions: `public/dns-setup.md`
+
+The temporary Pages build uses the `/clawhatch/` base path. The
+custom-domain-ready build is retained in the `gh-pages` history and uses `/`.
+
+## Vercel (supported alternative)
 
 | Setting | Value |
 |---------|--------|
@@ -37,7 +49,7 @@ npm run typecheck
 1. Project → **Settings → Domains**
 2. Add `clawhatch.co.uk` and `www.clawhatch.co.uk`
 3. Prefer **redirect www → apex**
-4. At **names.co.uk** DNS, set the **A / CNAME values Vercel shows** (typical: apex `A` → `76.76.21.21`, `www` CNAME → `cname.vercel-dns.com`)
+4. At **names.co.uk** DNS, set the exact **A / CNAME values Vercel shows**
 5. Do **not** change nameservers or MX if you use names.co.uk email
 
 Canonical URL: **https://clawhatch.co.uk**
