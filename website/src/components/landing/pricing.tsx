@@ -4,6 +4,10 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { PRODUCT } from "@/lib/product";
 
+const nestCheckoutUrl = import.meta.env.VITE_NEST_CHECKOUT_URL?.trim();
+const secureHatchCheckoutUrl =
+  import.meta.env.VITE_SECURE_HATCH_CHECKOUT_URL?.trim();
+
 const tiers = [
   {
     name: "Hatch (Free)",
@@ -20,8 +24,8 @@ const tiers = [
     price: "License",
     period: "",
     blurb: "Unlock continuous watch via ~/.clawhatch/license.key",
-    cta: "Request access",
-    href: "#signup",
+    cta: nestCheckoutUrl ? "Buy Nest" : "Request access",
+    href: nestCheckoutUrl || "#signup",
     featured: true,
     features: [...PRODUCT.paidTier, "Everything in free tier", "Tasteful upsell in CLI"],
   },
@@ -30,8 +34,8 @@ const tiers = [
     price: "Custom",
     period: "",
     blurb: "Human-assisted hatch for teams and agencies.",
-    cta: "Contact",
-    href: "#signup",
+    cta: secureHatchCheckoutUrl ? "Book Secure Hatch" : "Contact",
+    href: secureHatchCheckoutUrl || "#signup",
     featured: false,
     features: [
       "Live or async hardening session",

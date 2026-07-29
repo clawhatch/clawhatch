@@ -64,6 +64,19 @@ Canonical URL: **https://clawhatch.co.uk**
 
 Assets: `/claw-hero.jpeg`, `/scroll-world/stills/*`, `/scroll-world/vid/*`
 
+## Payments
+
+The pricing CTAs accept public hosted-checkout URLs at build time:
+
+```bash
+VITE_NEST_CHECKOUT_URL=https://checkout.example/nest
+VITE_SECURE_HATCH_CHECKOUT_URL=https://checkout.example/secure-hatch
+```
+
+If a URL is absent, the corresponding card uses the honest email/contact path.
+Do not add a checkout URL until the payment account is verified and the product
+name, currency, price, tax treatment, refund terms, and fulfilment are approved.
+
 ## Source of truth
 
 Product claims (version, check counts, freemium) live in `src/lib/product.ts` and should track the CLI README on GitHub.
