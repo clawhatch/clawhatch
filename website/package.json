@@ -1,0 +1,47 @@
+{
+  "name": "clawhatch-website",
+  "private": true,
+  "version": "1.0.0",
+  "homepage": "https://clawhatch.co.uk",
+  "description": "ClawHatch marketing site — clawhatch.co.uk (monorepo path: website/)",
+  "sideEffects": false,
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev --host 0.0.0.0 --port 8080",
+    "build": "vite build",
+    "preview": "vite preview --host 0.0.0.0 --port 8080",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/clawhatch/clawhatch.git",
+    "directory": "website"
+  },
+  "bugs": {
+    "url": "https://github.com/clawhatch/clawhatch/issues"
+  },
+  "dependencies": {
+    "@radix-ui/react-slot": "^1.2.4",
+    "@tailwindcss/vite": "^4.1.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.510.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "tailwind-merge": "^3.5.0",
+    "tailwindcss": "^4.1.0",
+    "tw-animate-css": "^1.3.4"
+  },
+  "devDependencies": {
+    "@types/node": "^22.16.5",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "typescript": "^5.7.0",
+    "vite": "^8.1.0"
+  },
+  "engines": {
+    "node": ">=22.12"
+  }
+}
