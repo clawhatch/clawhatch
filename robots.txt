@@ -1,0 +1,5 @@
+# ClawHatch — https://clawhatch.co.uk
+User-agent: *
+Allow: /
+
+Sitemap: https://clawhatch.co.uk/sitemap.xml

@@ -1,0 +1,10 @@
+{
+  "name": "ClawHatch",
+  "short_name": "ClawHatch",
+  "description": "OpenClaw, born secure.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0c",
+  "theme_color": "#0a0a0c",
+  "lang": "en-GB"
+}
